@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Restoran</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo-resto.jpeg" alt="Logo Restoran" class="logo">
+            <h1>Menu Restaurant</h1>
+        </header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="#makanan">Makanan</a></li>
+                <li><a href="#minuman">Minuman</a></li>
+                <li><a href="#cemilan">Cemilan</a></li>
+            </ul>
+        </nav>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Menu</th>
+                    <th>Jumlah</th>
+                    <th>Harga Satuan</th>
+                    <th>Total Harga</th>
+                </tr>
+            </thead>
+            <tbody id="makanan">
+                <tr>
+                    <td><img src="mie-ramen.jpeg" alt="Mie Ramen" class="menu-img"><br>Mie Ramen</td>
+                    <td><input type="number" id="jumlahMieRamen" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 30.000</td>
+                    <td id="totalHargaMieRamen">Rp 30.000</td>
+                </tr>
+                <tr>
+                    <td><img src="mie-kari.jpeg" alt="Mie Kari" class="menu-img"><br>Mie Kari</td>
+                    <td><input type="number" id="jumlahMieKari" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 30.000</td>
+                    <td id="totalHargaMieKari">Rp 30.000</td>
+                </tr>
+                <tr>
+                    <td><img src="nasi-goreng.jpeg" alt="Nasi Goreng" class="menu-img"><br>Nasi Goreng</td>
+                    <td><input type="number" id="jumlahNasgor" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 25.000</td>
+                    <td id="totalHargaNasgor">Rp 25.000</td>
+                </tr>
+                <tr>
+                    <td><img src="ayam-bakar.jpeg" alt="Ayam Bakar" class="menu-img"><br>Ayam Bakar</td>
+                    <td><input type="number" id="jumlahAyamBakar" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 35.000</td>
+                    <td id="totalHargaAyamBakar">Rp 35.000</td>
+                </tr>
+                <tr>
+                    <td><img src="ayam-goreng.jpeg" alt="Ayam Goreng" class="menu-img"><br>Ayam Goreng</td>
+                    <td><input type="number" id="jumlahAyamGoreng" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 30.000</td>
+                    <td id="totalHargaAyamGoreng">Rp 30.000</td>
+                </tr>
+                <tr>
+                    <td><img src="ayam-geprek.jpeg" alt="Ayam Geprek" class="menu-img"><br>Ayam Geprek</td>
+                    <td><input type="number" id="jumlahAyamGeprek" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 35.000</td>
+                    <td id="totalHargaAyamGeprek">Rp 35.000</td>
+                </tr>
+                <tr id="minuman">
+                    <td><img src="es-teh-manis.jpeg" alt="Es Teh" class="menu-img"><br>Es Teh</td>
+                    <td><input type="number" id="jumlahEsTeh" value="1" min="1" onchange="updateTotal()"> Gelas</td>
+                    <td>Rp 5.000</td>
+                    <td id="totalHargaEsTeh">Rp 5.000</td>
+                </tr>
+                <tr>
+                    <td><img src="pop-ice.jpeg" alt="Pop Ice" class="menu-img"><br>Pop Ice</td>
+                    <td><input type="number" id="jumlahPopIce" value="1" min="1" onchange="updateTotal()"> Gelas</td>
+                    <td>Rp 10.000</td>
+                    <td id="totalHargaPopIce">Rp 10.000</td>
+                </tr>
+                <tr>
+                    <td><img src="es-jeruk.jpeg" alt="Es Jeruk" class="menu-img"><br>Es Jeruk</td>
+                    <td><input type="number" id="jumlahEsJeruk" value="1" min="1" onchange="updateTotal()"> Gelas</td>
+                    <td>Rp 12.000</td>
+                    <td id="totalHargaEsJeruk">Rp 12.000</td>
+                </tr>
+                <tr>
+                    <td><img src="air-putih.jpeg" alt="Air Putih" class="menu-img"><br>Air Putih</td>
+                    <td><input type="number" id="jumlahAirPutih" value="1" min="1" onchange="updateTotal()"> Gelas</td>
+                    <td>Rp 5.000</td>
+                    <td id="totalHargaAirPutih">Rp 5.000</td>
+                </tr>
+                <tr id="cemilan">
+                    <td><img src="siomay.jpeg" alt="Siomay" class="menu-img"><br>Siomay</td>
+                    <td><input type="number" id="jumlahSiomay" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 15.000</td>
+                    <td id="totalHargaSiomay">Rp 15.000</td>
+                </tr>
+                <tr>
+                    <td><img src="udang-keju.jpeg" alt="Udang Keju" class="menu-img"><br>Udang Keju</td>
+                    <td><input type="number" id="jumlahUdangKeju" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 20.000</td>
+                    <td id="totalHargaUdangKeju">Rp 20.000</td>
+                </tr>
+                <tr>
+                    <td><img src="pisang-coklat.jpeg" alt="Pisang Coklat" class="menu-img"><br>Pisang Coklat</td>
+                    <td><input type="number" id="jumlahPisangCoklat" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 25.000</td>
+                    <td id="totalHargaPisangCoklat">Rp 25.000</td>
+                </tr>
+                <tr>
+                    <td><img src="roti-bakar.jpeg" alt="Roti Bakar" class="menu-img"><br>Roti Bakar</td>
+                    <td><input type="number" id="jumlahRotiBakar" value="1" min="1" onchange="updateTotal()"> Porsi</td>
+                    <td>Rp 20.000</td>
+                    <td id="totalHargaRotiBakar">Rp 20.000</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3" class="right">Total Pesanan</td>
+                    <td id="totalPesanan">Rp 237.000</td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="window.location.href='konfirmasi.html'">Lanjut ke Konfirmasi Pembayaran</button>
+    </div>
+</body>
+</html>
