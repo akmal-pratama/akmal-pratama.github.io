@@ -1,5 +1,5 @@
 // --- KONFIGURASI DATABASE ---
-// GANTI URL DI BAWAH INI DENGAN URL GOOGLE SCRIPT KAMU
+// URL ini sudah saya masukkan sesuai yang kamu kirim
 const API_URL = 'https://script.google.com/macros/s/AKfycbwCXAcgg52jpgQJklQ5vLEoDsLbwZtDgoEzEihuli1SMPKVghhjISvJi4ftDQeZMgbZ/exec'; 
 
 const form = document.getElementById('itemForm');
@@ -17,7 +17,7 @@ let allItems = [];
 // Helper: Tampilkan Loading
 function showLoading(isLoading) {
     if (isLoading) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">⏳ Sedang memuat data...</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">⏳ Sedang memuat data dari Google Sheets...</td></tr>';
         submitBtn.disabled = true;
     } else {
         submitBtn.disabled = false;
@@ -39,7 +39,7 @@ async function fetchItems() {
         
     } catch (error) {
         console.error("Error:", error);
-        tableBody.innerHTML = '<tr><td colspan="4" style="color:red; text-align:center;">Gagal mengambil data. Cek koneksi internet.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="4" style="color:red; text-align:center;">Gagal mengambil data. Cek koneksi internet atau izin API.</td></tr>';
     } finally {
         submitBtn.disabled = false;
     }
@@ -112,7 +112,7 @@ form.addEventListener('submit', async function(e) {
         fetchItems(); // Refresh data
 
     } catch (error) {
-        alert("Gagal menyimpan data!");
+        alert("Gagal menyimpan data! Pastikan internet lancar.");
         console.error(error);
     } finally {
         submitBtn.textContent = originalText;
@@ -137,7 +137,6 @@ tableBody.addEventListener('click', async function(e) {
         submitBtn.style.color = '#333';
         cancelBtn.style.display = 'block';
         
-        // Scroll ke atas biar user liat formnya
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
@@ -168,5 +167,4 @@ function resetForm() {
 }
 
 // Jalankan saat load
-
 fetchItems();
