@@ -1,6 +1,6 @@
 // --- KONFIGURASI DATABASE ---
 // GANTI URL DI BAWAH INI DENGAN URL GOOGLE SCRIPT KAMU
-const API_URL = 'LINK_GOOGLE_SCRIPT_KAMU_DISINI'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbwCXAcgg52jpgQJklQ5vLEoDsLbwZtDgoEzEihuli1SMPKVghhjISvJi4ftDQeZMgbZ/exec'; 
 
 const form = document.getElementById('itemForm');
 const itemNameInput = document.getElementById('itemName');
@@ -168,4 +168,5 @@ function resetForm() {
 }
 
 // Jalankan saat load
+
 fetchItems();
