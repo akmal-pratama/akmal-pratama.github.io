@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi List Harga Barang</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>🏷️ Daftar Harga Barang</h2>
+
+        <form id="itemForm">
+            <input type="hidden" id="edit-index">
+            <div class="form-group">
+                <input type="text" id="itemName" placeholder="Nama Barang" required>
+                <input type="number" id="itemPrice" placeholder="Harga (Rp)" required>
+                <button type="submit" id="submit-btn">Tambah</button>
+                <button type="button" id="cancel-btn" onclick="resetForm()">Batal</button>
+            </div>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50px;">No.</th>
+                    <th>Nama Barang</th>
+                    <th>Harga</th>
+                    <th style="width: 120px;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
