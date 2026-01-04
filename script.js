@@ -1,6 +1,6 @@
 // --- KONFIGURASI DATABASE ---
 // URL ini sudah saya masukkan sesuai yang kamu kirim
-const API_URL = 'https://https://script.google.com/macros/s/AKfycbx-gmo9Nql3UPzMKClxEFBCNiyrgbqELHnw1lMufYHdI_tfezZ4rTJsWSLok8a4QAyF/exec.google.com/macros/s/AKfycbwCXAcgg52jpgQJklQ5vLEoDsLbwZtDgoEzEihuli1SMPKVghhjISvJi4ftDQeZMgbZ/exec'; 
+const API_URL = 'https://script.google.com/macros/s/AKfycbx-gmo9Nql3UPzMKClxEFBCNiyrgbqELHnw1lMufYHdI_tfezZ4rTJsWSLok8a4QAyF/exec'; 
 
 const form = document.getElementById('itemForm');
 const itemNameInput = document.getElementById('itemName');
