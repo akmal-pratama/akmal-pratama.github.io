@@ -1,19 +1,47 @@
-// 1. Inisialisasi Data
-let items = JSON.parse(localStorage.getItem('items')) || [];
+// --- KONFIGURASI DATABASE ---
+// PASTE URL DARI GOOGLE APPS SCRIPT DI SINI (JANGAN SAMPAI SALAH)
+const API_URL = 'https://script.google.com/macros/s/AKfycbwCXAcgg52jpgQJklQ5vLEoDsLbwZtDgoEzEihuli1SMPKVghhjISvJi4ftDQeZMgbZ/exec'; 
+
 const form = document.getElementById('itemForm');
 const itemNameInput = document.getElementById('itemName');
 const itemPriceInput = document.getElementById('itemPrice');
-const editIndexInput = document.getElementById('edit-index');
+const editIndexInput = document.getElementById('edit-index'); // Kita pakai ini buat simpan ID Baris Excel
 const submitBtn = document.getElementById('submit-btn');
 const cancelBtn = document.getElementById('cancel-btn');
 const tableBody = document.getElementById('tableBody');
 
-// 2. Fungsi Render Tabel
-function renderTable() {
+// Helper: Tampilkan Loading saat ambil data
+function showLoading(isLoading) {
+    if (isLoading) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">⏳ Sedang memuat data dari Google Sheets...</td></tr>';
+        submitBtn.disabled = true;
+    } else {
+        submitBtn.disabled = false;
+    }
+}
+
+// 1. READ: Ambil Data dari Google Sheets
+async function fetchItems() {
+    showLoading(true);
+    try {
+        const response = await fetch(API_URL);
+        const items = await response.json();
+        renderTable(items);
+    } catch (error) {
+        console.error("Error:", error);
+        tableBody.innerHTML = '<tr><td colspan="4" style="color:red; text-align:center;">Gagal mengambil data. Cek koneksi internet.</td></tr>';
+    } finally {
+        // Matikan loading, kembalikan tombol
+        submitBtn.disabled = false;
+    }
+}
+
+// 2. RENDER: Tampilkan ke Tabel
+function renderTable(items) {
     tableBody.innerHTML = '';
     
     if (items.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Belum ada barang. Silakan tambah data.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Database kosong.</td></tr>';
         return;
     }
 
@@ -24,15 +52,15 @@ function renderTable() {
             minimumFractionDigits: 0
         }).format(item.price);
 
-        // PERUBAHAN DI SINI: Kita hapus onclick="..." dan ganti pakai data-index
+        // Kita simpan ID baris Excel (item.id) di tombol data-id
         const row = `
             <tr>
                 <td>${index + 1}</td>
                 <td>${item.name}</td>
                 <td>${formattedPrice}</td>
                 <td class="action-buttons">
-                    <button class="btn-edit" data-index="${index}">Edit</button>
-                    <button class="btn-delete" data-index="${index}">Hapus</button>
+                    <button class="btn-edit" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}">Edit</button>
+                    <button class="btn-delete" data-id="${item.id}">Hapus</button>
                 </td>
             </tr>
         `;
@@ -40,73 +68,80 @@ function renderTable() {
     });
 }
 
-// 3. EVENT LISTENER UNTUK TOMBOL (Teknik Event Delegation)
-// Ini mendeteksi klik pada tabel, lalu mengecek tombol apa yang ditekan
-tableBody.addEventListener('click', function(e) {
-    // Jika yang diklik adalah tombol HAPUS
-    if (e.target.classList.contains('btn-delete')) {
-        const index = e.target.getAttribute('data-index');
-        deleteItem(index);
-    }
-    
-    // Jika yang diklik adalah tombol EDIT
-    if (e.target.classList.contains('btn-edit')) {
-        const index = e.target.getAttribute('data-index');
-        editItem(index);
-    }
-});
-
-// 4. Fungsi Tambah / Update
-form.addEventListener('submit', function(e) {
+// 3. CREATE & UPDATE: Kirim Data ke Sheets
+form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const name = itemNameInput.value;
     const price = Number(itemPriceInput.value);
-    const index = editIndexInput.value;
+    const id = editIndexInput.value; // Ini ID baris excel
 
-    if (index === '') {
-        items.push({ name, price });
-    } else {
-        items[index] = { name, price };
+    // Tentukan Aksi: create atau update
+    const action = id ? 'update' : 'create';
+    
+    // Ubah tombol jadi loading
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Menyimpan...';
+    submitBtn.disabled = true;
+
+    try {
+        // Kirim data ke API
+        await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action, id, name, price }) // Kita kirim JSON
+        });
+
+        // Sukses! Reset form dan ambil data terbaru
+        resetForm();
+        fetchItems(); 
+
+    } catch (error) {
+        alert("Gagal menyimpan data!");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
     }
-
-    saveAndRender();
-    resetForm();
 });
 
-// 5. Fungsi Logika Edit
-function editItem(index) {
-    const item = items[index];
-    itemNameInput.value = item.name;
-    itemPriceInput.value = item.price;
-    editIndexInput.value = index;
+// 4. EVENT LISTENER (Klik Tombol Tabel)
+tableBody.addEventListener('click', async function(e) {
+    // TOMBOL EDIT
+    if (e.target.classList.contains('btn-edit')) {
+        const id = e.target.getAttribute('data-id');
+        const name = e.target.getAttribute('data-name');
+        const price = e.target.getAttribute('data-price');
 
-    submitBtn.textContent = 'Update';
-    submitBtn.style.backgroundColor = '#ffc107';
-    submitBtn.style.color = '#333';
-    cancelBtn.style.display = 'block';
-}
+        // Masukkan data ke form
+        itemNameInput.value = name;
+        itemPriceInput.value = price;
+        editIndexInput.value = id;
 
-// 6. Fungsi Logika Hapus
-function deleteItem(index) {
-    if(confirm('Yakin ingin menghapus barang ini?')) {
-        // Hapus 1 item berdasarkan index
-        items.splice(index, 1);
-        saveAndRender();
-        
-        // Jika user menghapus barang yang sedang diedit, reset formnya
-        if (index == editIndexInput.value) {
-            resetForm();
+        submitBtn.textContent = 'Update';
+        submitBtn.style.backgroundColor = '#ffc107';
+        submitBtn.style.color = '#333';
+        cancelBtn.style.display = 'block';
+    }
+    
+    // TOMBOL HAPUS
+    if (e.target.classList.contains('btn-delete')) {
+        if(confirm('Yakin ingin menghapus data ini dari Database?')) {
+            const id = e.target.getAttribute('data-id');
+            
+            // Tampilkan loading kecil di tombol
+            e.target.textContent = '...';
+            e.target.disabled = true;
+
+            await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'delete', id: id })
+            });
+
+            fetchItems(); // Refresh tabel
         }
     }
-}
+});
 
-// 7. Helper
-function saveAndRender() {
-    localStorage.setItem('items', JSON.stringify(items));
-    renderTable();
-}
-
+// 5. Reset Form
 function resetForm() {
     form.reset();
     editIndexInput.value = '';
@@ -116,5 +151,5 @@ function resetForm() {
     cancelBtn.style.display = 'none';
 }
 
-// Jalankan saat load
-renderTable();
+// Jalankan saat pertama kali buka web
+fetchItems();
